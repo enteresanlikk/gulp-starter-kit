@@ -1,1 +1,1 @@
-# gulp-starter-kit
+# Gulp Starter Kit
