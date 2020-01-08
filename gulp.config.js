@@ -74,32 +74,23 @@ module.exports = () => {
     }
   };
 
-  const html = {
-    watch: root + 'html/**/*.html'
-  };
-
-  const fileinclude = {
-    src: root + 'html/pages/**/*.html',
+  const twig = {
+    src: root + 'html/*.twig',
+    watch: root + 'html/**/*.twig',
     build: dir.build,
-    watch: root + 'html/**/*.html',
-    
-    config: {
-      prefix: '@@',
-      basepath: '@file'
-    }
   };
 
   const fonts = {
     src: dir.src + 'fonts/**/*',
     watch: dir.src + 'fonts/**/*',
     build: dir.assets + 'fonts',
-  }
+  };
 
   const browsersync = {
     server: {
       server: {
         baseDir: dir.build,
-        index: 'index.html'
+        index: 'index.twig'
       },
       open: false,
       port: 3000
@@ -116,10 +107,8 @@ module.exports = () => {
     image,
     css,
     javascript,
-    html,
-    fileinclude,
+    twig,
     fonts,
-
     browsersync
   }
 };

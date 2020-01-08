@@ -9,15 +9,21 @@
   const rename = require("gulp-rename");
   const sourcemaps = require('gulp-sourcemaps');
   const imagemin = require('gulp-imagemin');
-  const fileinclude = require('gulp-file-include');
   const babel = require('gulp-babel');
   const minify = require('gulp-minify');
+  const twig = require('gulp-twig');
 
   //Paths
   const config = require('./gulp.config')();
 
   const Clean = () => {
     return del([config.dir.build]);
+  };
+
+  const Twig = () => {
+    return gulp.src(config.twig.src)
+        .pipe(twig())
+        .pipe(gulp.dest(config.twig.build));
   };
 
   const Image = () => {
@@ -46,12 +52,6 @@
       .pipe(browserSync.reload(config.browsersync.reload));
   };
 
-  const FileInclude = () => {
-    return gulp.src(config.fileinclude.src)
-    .pipe(fileinclude(config.fileinclude.config))
-    .pipe(gulp.dest(config.fileinclude.build));
-  };
-
   const Fonts = () => {
     return gulp.src(config.fonts.src)
     .pipe(gulp.dest(config.fonts.build));
@@ -65,12 +65,13 @@
     gulp.watch(config.javascript.watch, Javascript);
     
     gulp.watch(config.fonts.watch, Fonts);
-    gulp.watch(config.fileinclude.watch, FileInclude);
+
+    gulp.watch(config.twig.watch, Twig);
 
     gulp.watch([
+        config.fonts.watch,
         config.image.watch,
-        config.html.watch,
-        config.fileinclude.watch
+        config.twig.watch
       ])
       .on("change", function () {
         browserSync.reload();
@@ -83,7 +84,7 @@
     Css,
     Javascript,
     Fonts,
-    FileInclude,
+    Twig,
 
     Watch
   );
