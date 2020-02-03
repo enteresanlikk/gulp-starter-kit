@@ -101,7 +101,7 @@ module.exports = () => {
 
   const removeEmptyLines = {
     options: {
-      removeComments: true
+      removeComments: false
     }
   };
 

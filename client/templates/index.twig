@@ -1,18 +1,22 @@
-{% extends "layouts/_default.twig" %}
+{% extends "layout/_default.twig" %}
 {% set title = seo.title %}
+
+{% block styles %}
+
+{% endblock %}
 
 {% block content %}
 
-    <h1>home page</h1>
+    <h1>Home Page</h1>
 
     <ul>
-        {% for data in datas %}
+        {% for post in posts %}
             <li>
-                <b>{{ data.title }}</b>
-                <p>{{ data.description }}</p>
+                <b>{{ post.title }}</b>
+                <p>{{ post.description }}</p>
             </li>
         {% else %}
-            Data not found
+            Post not found.
         {% endfor %}
     </ul>
 
