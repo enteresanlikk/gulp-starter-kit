@@ -11,9 +11,17 @@
   const imagemin = require('gulp-imagemin');
   const babel = require('gulp-babel');
   const minify = require('gulp-minify');
-  const twig = require('gulp-twig');
 
-  //Paths
+  const path = require('path');
+  const fs = require('fs');
+  const data = require('gulp-data');
+  const twig = require('gulp-twig');
+  const plumber = require('gulp-plumber');
+
+  const beautify = require('gulp-beautify');
+  const removeEmptyLines = require('gulp-remove-empty-lines');
+
+  //Config
   const config = require('./gulp.config')();
 
   const Clean = () => {
@@ -22,7 +30,31 @@
 
   const Twig = () => {
     return gulp.src(config.twig.src)
+        .pipe(plumber({
+          handleError: function (err) {
+            console.log(err);
+            this.emit('end');
+          }
+        }))
+        .pipe(data(async function (file) {
+          let extension = path.extname(file.path);
+          let filename = path.basename(file.path, extension);
+          let dataFilename = config.twig.data.src + filename + '.json';
+
+          let exists = await fs.existsSync(dataFilename);
+
+          if(exists) {
+            let pageData = await fs.readFileSync(dataFilename);
+            return JSON.parse(pageData);
+          }
+        }))
         .pipe(twig())
+        .on('error', function (err) {
+          process.stderr.write(err.message + '\n');
+          this.emit('end');
+        })
+        .pipe(beautify.html(config.beautify.html))
+        .pipe(removeEmptyLines(config.removeEmptyLines.options))
         .pipe(gulp.dest(config.twig.build));
   };
 
@@ -30,7 +62,7 @@
     return gulp.src(config.image.src)
       .pipe(imagemin(config.image.imagemin))
       .pipe(gulp.dest(config.image.build))
-      .pipe(browserSync.reload(config.browsersync.reload));
+      .pipe(browserSync.reload(config.browserSync.reload));
   };
 
   const Css = () => {
@@ -41,7 +73,7 @@
       .pipe(sourcemaps.write())
       .pipe(rename(config.css.outputFilename))
       .pipe(gulp.dest(config.css.build))
-      .pipe(browserSync.reload(config.browsersync.reload));
+      .pipe(browserSync.reload(config.browserSync.reload));
   };
 
   const Javascript = () => {
@@ -49,7 +81,7 @@
       .pipe(babel(config.javascript.babel))
       .pipe(minify(config.javascript.minify))
       .pipe(gulp.dest(config.javascript.build))
-      .pipe(browserSync.reload(config.browsersync.reload));
+      .pipe(browserSync.reload(config.browserSync.reload));
   };
 
   const Fonts = () => {
@@ -58,7 +90,10 @@
   };
 
   const Watch = () => {
-    browserSync.init(config.browsersync.server);
+    browserSync.init(config.browserSync.server);
+
+    gulp.watch(config.twig.watch, Twig);
+    gulp.watch(config.twig.data.watch, Twig);
 
     gulp.watch(config.image.watch, Image);
     gulp.watch(config.css.watch, Css);
@@ -66,12 +101,11 @@
     
     gulp.watch(config.fonts.watch, Fonts);
 
-    gulp.watch(config.twig.watch, Twig);
-
     gulp.watch([
         config.fonts.watch,
         config.image.watch,
-        config.twig.watch
+        config.twig.watch,
+        config.twig.data.watch
       ])
       .on("change", function () {
         browserSync.reload();
@@ -80,11 +114,11 @@
 
   exports.default = gulp.series(
     Clean,
+    Twig,
     Image,
     Css,
     Javascript,
     Fonts,
-    Twig,
 
     Watch
   );

@@ -1,0 +1,23 @@
+{% extends "layouts/_default.twig" %}
+{% set title = seo.title %}
+
+{% block content %}
+
+    <h1>home page</h1>
+
+    <ul>
+        {% for data in datas %}
+            <li>
+                <b>{{ data.title }}</b>
+                <p>{{ data.description }}</p>
+            </li>
+        {% else %}
+            Data not found
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="/assets/js/pages/home.min.js"></script>
+{% endblock %}

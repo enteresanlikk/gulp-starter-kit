@@ -75,9 +75,16 @@ module.exports = () => {
   };
 
   const twig = {
-    src: root + 'html/*.twig',
-    watch: root + 'html/**/*.twig',
+    src: [
+      root + 'client/templates/*.twig'
+    ],
+    watch: root + 'client/templates/**/*.twig',
     build: dir.build,
+
+    data: {
+      src: root + 'client/data/',
+      watch: root + 'client/data/'
+    }
   };
 
   const fonts = {
@@ -86,11 +93,23 @@ module.exports = () => {
     build: dir.assets + 'fonts',
   };
 
-  const browsersync = {
+  const beautify = {
+    html: {
+      indent_size: 2
+    }
+  };
+
+  const removeEmptyLines = {
+    options: {
+      removeComments: true
+    }
+  };
+
+  const browserSync = {
     server: {
       server: {
         baseDir: dir.build,
-        index: 'index.twig'
+        index: 'index.html'
       },
       open: false,
       port: 3000
@@ -109,6 +128,9 @@ module.exports = () => {
     javascript,
     twig,
     fonts,
-    browsersync
+    beautify,
+    removeEmptyLines,
+
+    browserSync
   }
 };
