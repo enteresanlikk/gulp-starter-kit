@@ -7,18 +7,23 @@
 @import "base/base";
 @import "base/helpers";
 
-//layout
+//partials
 @import "components/buttons";
 
-//layout
-@import "layout/header";
-@import "layout/footer";
+//partials
+@import "partials/header";
+@import "partials/footer";
 
 //themes
 @import "themes/default";
 
 //vendors
-@import "vendors/normalize";
+@import "vendors/bootstrap/bootstrap";
+
+@import "vendors/font-awesome/fontawesome";
+@import "vendors/font-awesome/brands";
+@import "vendors/font-awesome/solid";
+@import "vendors/font-awesome/regular";
 
 //pages
 @import "pages/home";

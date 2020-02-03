@@ -30,7 +30,6 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-twig": "^1.2.0",
-    "gulp-uglifyjs": "^0.6.2",
     "imagemin-pngquant": "^8.0.0",
     "path": "^0.12.7",
     "postcss-assets": "^5.0.0"

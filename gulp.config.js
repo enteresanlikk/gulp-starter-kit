@@ -21,7 +21,7 @@ module.exports = () => {
 
   const css = {
     src: [
-      dir.src + 'css/**/*.scss'
+      dir.src + 'css/style.scss'
     ],
     watch: dir.src + 'css/**/*.scss',
     build: dir.assets + 'css',

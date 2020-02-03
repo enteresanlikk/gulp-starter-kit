@@ -7,18 +7,26 @@
 
 {% block content %}
 
-    <h1>Home Page</h1>
+    <section class="home-page">
+        <div class="container p-3">
 
-    <ul>
-        {% for post in posts %}
-            <li>
-                <b>{{ post.title }}</b>
-                <p>{{ post.description }}</p>
-            </li>
-        {% else %}
-            Post not found.
-        {% endfor %}
-    </ul>
+            <h1><i class="fa fa-home"></i> Home Page</h1>
+
+            <div class="row pt-3">
+                <ul>
+                    {% for post in posts %}
+                        <li>
+                            <b>{{ post.title }}</b>
+                            <p>{{ post.description }}</p>
+                        </li>
+                    {% else %}
+                        Post not found.
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </section>
 
 {% endblock %}
 
