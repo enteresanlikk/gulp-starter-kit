@@ -31,7 +31,7 @@
     return gulp.src(config.twig.src)
         .pipe(plumber({
           handleError: function (err) {
-            console.log(err);
+            process.stderr.write(err.message + '\n');
             this.emit('end');
           }
         }))
@@ -54,7 +54,8 @@
         })
         .pipe(beautify.html(config.beautify.html))
         .pipe(removeEmptyLines(config.removeEmptyLines.options))
-        .pipe(gulp.dest(config.twig.build));
+        .pipe(gulp.dest(config.twig.build))
+        .pipe(browserSync.reload(config.browserSync.reload));
   };
 
   const Image = () => {
@@ -69,8 +70,11 @@
       .pipe(sourcemaps.init())
       .pipe(sass(config.css.sass).on('error', sass.logError))
       .pipe(postcss(config.css.postCSS))
+      .pipe(rename(function(path) {
+        path.basename = path.basename.replace(config.css.rename.prefix, '');
+        path.extname = config.css.rename.extname;
+      }))
       .pipe(sourcemaps.write())
-      .pipe(rename(config.css.outputFilename))
       .pipe(gulp.dest(config.css.build))
       .pipe(browserSync.reload(config.browserSync.reload));
   };
@@ -85,7 +89,7 @@
 
   const Fonts = () => {
     return gulp.src(config.fonts.src)
-    .pipe(gulp.dest(config.fonts.build));
+        .pipe(gulp.dest(config.fonts.build));
   };
 
   const Watch = () => {

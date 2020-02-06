@@ -21,12 +21,16 @@ module.exports = () => {
 
   const css = {
     src: [
-      dir.src + 'css/style.scss'
+      dir.src + 'css/**/m-*.scss'
     ],
     watch: dir.src + 'css/**/*.scss',
     build: dir.assets + 'css',
 
-    outputFilename: "style.min.css",
+    rename: {
+      prefix: 'm-',
+      extname: '.min.css'
+    },
+
     sass: {
       outputStyle: "compressed",
       imagePath: dir.assets + "img/",
