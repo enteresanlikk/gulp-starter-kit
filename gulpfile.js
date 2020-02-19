@@ -23,6 +23,10 @@
   //Config
   const config = require('./gulp.config')();
 
+  const BrowserSync = () => {
+    return browserSync.reload(config.browserSync.reload);
+  };
+
   const Clean = () => {
     return del([config.dir.build]);
   };
@@ -55,14 +59,14 @@
         .pipe(beautify.html(config.beautify.html))
         .pipe(removeEmptyLines(config.removeEmptyLines.options))
         .pipe(gulp.dest(config.twig.build))
-        .pipe(browserSync.reload(config.browserSync.reload));
+        .pipe(BrowserSync());
   };
 
   const Image = () => {
     return gulp.src(config.image.src)
       .pipe(imagemin(config.image.imagemin))
       .pipe(gulp.dest(config.image.build))
-      .pipe(browserSync.reload(config.browserSync.reload));
+      .pipe(BrowserSync());
   };
 
   const Css = () => {
@@ -76,7 +80,7 @@
       }))
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(config.css.build))
-      .pipe(browserSync.reload(config.browserSync.reload));
+      .pipe(BrowserSync());
   };
 
   const Javascript = () => {
@@ -84,7 +88,7 @@
       .pipe(babel(config.javascript.babel))
       .pipe(minify(config.javascript.minify))
       .pipe(gulp.dest(config.javascript.build))
-      .pipe(browserSync.reload(config.browserSync.reload));
+      .pipe(BrowserSync());
   };
 
   const Fonts = () => {
@@ -93,7 +97,7 @@
   };
 
   const Watch = () => {
-    browserSync.init(config.browserSync.server);
+    browserSync.init(config.browserSync.serverOptions);
 
     gulp.watch(config.twig.watch, Twig);
     gulp.watch(config.twig.data.watch, Twig);
@@ -111,7 +115,7 @@
         config.twig.data.watch
       ])
       .on("change", function () {
-        browserSync.reload();
+        BrowserSync();
       });
   };
 

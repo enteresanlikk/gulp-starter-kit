@@ -110,7 +110,7 @@ module.exports = () => {
   };
 
   const browserSync = {
-    server: {
+    serverOptions: {
       server: {
         baseDir: dir.build,
         index: 'index.html'
